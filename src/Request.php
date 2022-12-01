@@ -61,7 +61,7 @@ class Request {
 
 		$test_mode = $this->gateway->get_option( 'test_mode' );
 
-		$this->endpoint  = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/prePaymentUi' : 'https://core-paco.2c2p.com/api/1.0/Payment/prePaymentUi';
+		$this->endpoint  = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi' : 'https://core.paco.2c2p.com/api/1.0/Payment/nonUi';
 		$hbl_payment_args = $this->get_hbl_payment_args( $order );
 
 		\WC_Gateway_HBL_Payment::log( 'Himalayan Bank Payment Request Args for order ' . $order->get_order_number() . ': ' . wc_print_r( $hbl_payment_args, true ) );
@@ -72,6 +72,7 @@ class Request {
 			'body'        => $body,
 			'headers'     => array(
 				'Content-Type' => 'application/json',
+				'apiKey' => $this->gateway->get_option( 'merchant_password' )
 			),
 			'timeout'     => 60,
 			'redirection' => 5,
@@ -89,8 +90,9 @@ class Request {
 		} else {
 			$body = wp_remote_retrieve_body( $response );
 
-			error_log( print_r( $body, true ) );
 			$body = json_decode( $body );
+			
+			error_log( print_r( $body, true ) );
 
 			\WC_Gateway_HBL_Payment::log( 'Response details for ' . $order->get_order_number() . ': ' . wc_print_r( $body, true ) );
 
@@ -111,48 +113,88 @@ class Request {
 
 		\WC_Gateway_HBL_Payment::log( 'Generating payment form for order ' . $order->get_order_number() . '. Notify URL: ' . $this->notify_url );
 
-		$product_details = $this->build_products( $order );
-
-		return apply_filters(
-			'woocommerce_hbl_payment_args',
-			array(
-				'totalAmount'    => wc_format_decimal( $order->get_total(), 2 ),
-				'merchantId'     => $this->gateway->get_option( 'merchant_id' ),
-				'invoiceNo'      => $this->gateway->get_option( 'invoice_prefix' ) . $order->get_order_number(),
-				'returnUrl'      => apply_filters( 'hbl_payment_for_woocommerce_return_url', home_url( '/checkout/order-received/' . $order->get_order_number() . '/key=' . $order->get_order_key() ) ),
-				'remarks'        => apply_filters( 'hbl_payment_for_woocommerce_remarks', 'Namaste!' ),
-				'password'       => $this->gateway->get_option( 'merchant_password' ),
-				'productDetails' => array_values( $product_details ),
-			),
-			$order
-		);
+		return [
+            "apiRequest" => [
+                "requestMessageID" => $this->Guid(),
+                "requestDateTime" => time(),
+                "language" => "en-US",
+            ],
+            "officeId" => $this->gateway->get_option( 'merchant_id' ),
+            "orderNo" => $order->get_order_number(),
+            "productDescription" => "product desc.",
+            "paymentType" => "CC",
+            "paymentCategory" => "ECOM",
+            "creditCardDetails" => [
+                "cardNumber" => "4404670000020994",
+                "cardExpiryMMYY" => "0426",
+                "cvvCode" => "829",
+                "payerName" => "Demo Sample"
+            ],
+            "storeCardDetails" => [
+                "storeCardFlag" => "N",
+                "storedCardUniqueID" => "{{guid}}"
+            ],
+            "installmentPaymentDetails" => [
+                "ippFlag" => "N",
+                "installmentPeriod" => 0,
+                "interestType" => null
+            ],
+            "mcpFlag" => "N",
+            "request3dsFlag" => "N",
+            "transactionAmount" => [
+                "amountText" => "000000100000",
+                "currencyCode" => "USD",
+                "decimalPlaces" => 2,
+                "amount" => 1000
+            ],
+            "notificationURLs" => [
+                "confirmationURL" => site_url(),
+                "failedURL" => site_url(),
+                "cancellationURL" => site_url(),
+                "backendURL" => site_url()
+            ],
+            "deviceDetails" => [
+                "browserIp" => "1.0.0.1",
+                "browser" => "Postman Browser",
+                "browserUserAgent" => "PostmanRuntime/7.26.8 - not from header",
+                "mobileDeviceFlag" => "N"
+            ],
+            "purchaseItems" => [
+                [
+                    "purchaseItemType" => "ticket",
+                    "referenceNo" => "2322460376026",
+                    "purchaseItemDescription" => "Bundled insurance",
+                    "purchaseItemPrice" => [
+                        "amountText" => "000000100000",
+                        "currencyCode" => "USD",
+                        "decimalPlaces" => 2,
+                        "amount" => 1000
+                    ],
+                    "subMerchantID" => "string",
+                    "passengerSeqNo" => 1
+                ]
+            ]
+        ];
 	}
 
 	/**
-	 * Build product details to pass to Himalayan Bank.
-	 *
-	 * @param  WC_Order $order Order object.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @return array Product details
-	 */
-	protected function build_products( $order ) {
-		$items = $order->get_items();
-
-		$products = array();
-
-		foreach ( $items as $key => $item ) {
-
-			$item_data = $item->get_data();
-			$product   = $item->get_product();
-
-			$products[ $key ]['productName'] = $item_data['name'];
-			$products[ $key ]['quantity']    = $item_data['quantity'];
-			$products[ $key ]['rate']        = ! empty( $product->get_price() ) ? $product->get_price() : $item_data['subtotal'];
-			$products[ $key ]['total']       = $item_data['total'];
-		}
-
-		return $products;
-	}
+     * Creates a GUID
+     *
+     * @return string
+     */
+    private function Guid(): string
+    {
+        if (function_exists('com_create_guid')) {
+            return com_create_guid();
+        } else {
+            $charId = strtoupper(md5(uniqid(rand(), true)));
+            $hyphen = chr(45);// "-"
+            $guid = substr($charId, 0, 8) . $hyphen
+                . substr($charId, 8, 4) . $hyphen
+                . substr($charId, 12, 4) . $hyphen
+                . substr($charId, 16, 4) . $hyphen
+                . substr($charId, 20, 12);
+            return strtolower($guid);
+        }
+    }
 }
