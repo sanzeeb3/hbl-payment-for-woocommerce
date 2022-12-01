@@ -41,7 +41,7 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 		$this->id                 = 'hbl-payment';
 		$this->icon               = apply_filters( 'hbl_payment_for_woocommerce_icon', plugins_url( 'assets/hbl-payment.png', HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_FILE ) );
 		$this->has_fields         = false;
-		$this->order_button_text  = __( 'Proceed to HBL Payment', 'hbl-payment-for-woocommerce' );
+		$this->order_button_text  = __( 'Proceed to Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
 		$this->method_title       = __( 'Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
 		$this->method_description = __( 'Take payments via Himalayan Bank - sends customers to Himalayan Bank to enter their payment information.', 'hbl-payment-for-woocommerce' );
 
@@ -64,7 +64,7 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 			$this->enabled = 'no';
 		} elseif ( $this->merchant_id ) {
 			include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/Response.php';
-			// new \HBLPaymentForWooCommerce\Response( $this );
+			new \HBLPaymentForWooCommerce\Response( $this );
 		}
 	}
 
@@ -176,9 +176,9 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 
 		$order = wc_get_order( $order_id );
 
-		// $request = new \HBLPaymentForWooCommerce\Request( $this );
+		$request = new \HBLPaymentForWooCommerce\Request( $this );
 
-		// $result = $request->result( $order );
+		$result = $request->result( $order );
 
 		if ( isset( $result->data->redirectionUrl ) ) {
 

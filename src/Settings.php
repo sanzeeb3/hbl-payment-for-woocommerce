@@ -27,17 +27,17 @@ return array(
 		'default'     => __( 'Pay via Himalayan Bank. You will be redirected to Himalayan Bank website to securely pay with Himalayan Bank cards.', 'hbl-payment-for-woocommerce' ),
 	),
 	'merchant_id'       => array(
-		'title'       => __( 'Merchant ID', 'hbl-payment-for-woocommerce' ),
+		'title'       => __( 'Merchant ID (Office ID)', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'text',
 		'desc_tip'    => true,
-		'description' => __( 'Please enter your Himalayan Bank Merchant ID.', 'hbl-payment-for-woocommerce' ),
+		'description' => __( 'Please enter your Himalayan Bank Merchant ID (Office ID).', 'hbl-payment-for-woocommerce' ),
 		'default'     => '',
 	),
 	'merchant_password' => array(
-		'title'       => __( 'Merchant Password', 'hbl-payment-for-woocommerce' ),
+		'title'       => __( 'Secret (API) Key', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'text',
 		'desc_tip'    => true,
-		'description' => __( 'Please enter your Himalayan Bank metchant password.This is needed in order to take payment.', 'hbl-payment-for-woocommerce' ),
+		'description' => __( 'Please enter your Himalayan Bank API Key. This is needed in order to take payment.', 'hbl-payment-for-woocommerce' ),
 		'default'     => '',
 	),
 	'test_mode'         => array(
@@ -45,7 +45,7 @@ return array(
 		'type'        => 'checkbox',
 		'label'       => __( 'Enable Stage/Test Mode', 'hbl-payment-for-woocommerce' ),
 		'default'     => 'no',
-		'description' => __( 'If enabled, test mode Merchant ID and Merchant Password should be used.' ),
+		'description' => __( 'If enabled, test mode Merchant ID and API Key should be used.' ),
 	),
 	'invoice_prefix'    => array(
 		'title'       => __( 'Invoice prefix', 'hbl-payment-for-woocommerce' ),

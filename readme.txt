@@ -22,7 +22,7 @@ Accept the Himalayan Bank payment from your store.
 
 ### Requirements
 * PHP version 8.1 or higher. The plugin simply doesn't work on older plugin version.
-* Merchant ID & key. Contact bank for more information.
+* Merchant ID (Office ID) & API Key. Contact bank for more information.
 
 ### Intro
 [Himalayan Bank Limited](https://www.himalayanbank.com/) is one of the largest private banks of Nepal. If you do not know about the Himalayan Bank, you probably do not need this plugin.

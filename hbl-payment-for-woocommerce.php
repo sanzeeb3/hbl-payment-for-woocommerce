@@ -51,7 +51,7 @@ add_filter( 'woocommerce_payment_gateways', 'hbl_payment_gateway' );
  *
  * @param  array $methods WooCommerce payment methods.
  *
- * @since 1.0.0
+ * @since 2.0.0
  *
  * @return array Payment methods including Prabhu Pay.
  */
