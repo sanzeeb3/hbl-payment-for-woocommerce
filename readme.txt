@@ -18,12 +18,12 @@ Accept the Himalayan Bank payment from your store.
 
 > <strong>IMPORTANT</strong><br />
 > This is Himalayan Bank Payment version 2. v1 doesn't work anymore. Immediately update to v2 if you're still using v1.
-> Checkout the Announcement on v2.
+> This is a early (beta) version of v2. Perform various testings before using it in production sites.
 
 ### Requirements
 * PHP version 8.1 or higher. The plugin simply doesn't work on older PHP version.
 * PHP [Sodium Extension](https://www.php.net/manual/en/book.sodium.php).
-* Merchant ID (Office ID) & API Key. Contact bank for more information.
+* Merchant ID (Office ID) & API Key. Contact bank for these information.
 
 ### Intro
 [Himalayan Bank Limited](https://www.himalayanbank.com/) is one of the largest private banks of Nepal. If you do not know about the Himalayan Bank, you probably do not need this plugin.

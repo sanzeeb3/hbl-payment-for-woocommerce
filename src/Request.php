@@ -64,6 +64,8 @@ class Request {
 		$this->endpoint  = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi' : 'https://core.paco.2c2p.com/api/1.0/Payment/nonUi';
 		$hbl_payment_args = $this->get_hbl_payment_args( $order );
 
+		error_log( print_r( $hbl_payment_args, true ) );
+
 		\WC_Gateway_HBL_Payment::log( 'Himalayan Bank Payment Request Args for order ' . $order->get_order_number() . ': ' . wc_print_r( $hbl_payment_args, true ) );
 
 		$body = wp_json_encode( $hbl_payment_args );
@@ -118,15 +120,18 @@ class Request {
                 "language" => "en-US",
             ],
             "officeId" => $this->gateway->get_option( 'merchant_id' ),
-            "orderNo" => 4454,
+            "orderNo" => $order->get_order_number(),
             "productDescription" => "product desc.",
             "paymentType" => "CC",
             "paymentCategory" => "ECOM",
             "creditCardDetails" => [
-                "cardNumber" => "4404670000020994",
-                "cardExpiryMMYY" => "0426",
-                "cvvCode" => "829",
-                "payerName" => "SUJAN TEST"
+                // "cardNumber" => "4404670000020994",
+                "cardNumber" => isset( $_POST['hbl-payment-card-number'] ) ? wc_clean( $_POST['hbl-payment-card-number'] ) : '',
+                // "cardExpiryMMYY" => "0426",
+				"cardExpiryMMYY" => isset( $_POST['hbl-payment-card-expiry'] ) ? absint( str_replace( ' ', '', str_replace( '/', '', $_POST['hbl-payment-card-expiry'] ) ) ) : '',
+                "cvvCode" =>  isset( $_POST['hbl-payment-card-expiry'] ) ? absint( $_POST['hbl-payment-card-cvc'] ) : '',
+				// "cvvCode" => "829",
+                "payerName" => "{Your Name}"
             ],
             "storeCardDetails" => [
                 "storeCardFlag" => "N",
@@ -139,11 +144,17 @@ class Request {
             ],
             "mcpFlag" => "N",
             "request3dsFlag" => "N",
+			// "transactionAmount" => [
+            //     "amountText" => "000000100000",
+            //     "currencyCode" => "THB",
+            //     "decimalPlaces" => 2,
+            //     "amount" => '1000.00'
+            // ],
             "transactionAmount" => [
-                "amountText" => "000000100000",
-                "currencyCode" => "THB",
+				"amountText" => "000000" . absint( $order->get_total() ) ."00",
+                "currencyCode" => 'THB',
                 "decimalPlaces" => 2,
-                "amount" => 1000
+                "amount" => wc_format_decimal( $order->get_total(), 2 )
             ],
             "notificationURLs" => [
                 "confirmationURL" => $this->notify_url,
@@ -151,33 +162,27 @@ class Request {
                 "cancellationURL" => $this->notify_url,
                 "backendURL" => $this->notify_url
             ],
-            "deviceDetails" => [
-                "browserIp" => "1.0.0.1",
-                "browser" => "Postman Browser",
-                "browserUserAgent" => "PostmanRuntime/7.26.8 - not from header",
-                "mobileDeviceFlag" => "N"
-            ],
             "purchaseItems" => [
                 [
                     "purchaseItemType" => "ticket",
-                    "referenceNo" => "2322460376026",
-                    "purchaseItemDescription" => "Bundled insurance",
+                    "referenceNo" => $order->get_order_number(),
+                    "purchaseItemDescription" => "Product Description",
+					// "purchaseItemPrice" => [
+                    //     "amountText" => "000000100000",
+                    //     "currencyCode" => "THB",
+                    //     "decimalPlaces" => 2,
+                    //     "amount" => '1000.00'
+                    // ],
                     "purchaseItemPrice" => [
-                        "amountText" => "000000100000",
-                        "currencyCode" => "THB",
+                        "amountText" => "000000" . absint( $order->get_total() ) ."00",
+                        "currencyCode" => 'THB',
                         "decimalPlaces" => 2,
-                        "amount" => 1000
+                        "amount" => wc_format_decimal($order->get_total(), 2)
                     ],
                     "subMerchantID" => "string",
                     "passengerSeqNo" => 1
                 ]
 			],
-			"customFieldList" => [
-                [
-                    "fieldName" => "Test Field",
-                    "fieldValue" => "This is test"
-                ]
-            ]
         ];
 	}
 
