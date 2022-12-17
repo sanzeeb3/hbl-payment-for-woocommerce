@@ -43,7 +43,7 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 		$this->has_fields         = false;
 		$this->order_button_text  = __( 'Proceed to Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
 		$this->method_title       = __( 'Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
-		$this->method_description = __( 'Take payments via Himalayan Bank - sends customers to Himalayan Bank to enter their payment information.', 'hbl-payment-for-woocommerce' );
+		$this->method_description = __( 'Take payments via Himalayan Bank credit card in real time.', 'hbl-payment-for-woocommerce' );
 
 		// Load the settings.
 		$this->init_form_fields();
@@ -172,6 +172,8 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 	 * @return mixed
 	 */
 	public function process_payment( $order_id ) {
+		include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/library/index.php';
+
 		include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/Request.php';
 
 		$order = wc_get_order( $order_id );
@@ -180,18 +182,18 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 
 		$result = $request->result( $order );
 
-		if ( isset( $result->data->redirectionUrl ) ) {
+		error_log( print_r( $result, true ) );
 
-			// Assuming success.
-			return array(
-				'result'   => 'success',
-				'redirect' => esc_url( $result->data->redirectionUrl ),
-			);
+		if ( isset( $result->apiResponse->responseCode ) && 'PC-B050000' === $result->apiResponse->responseCode ) {
+
+			wc_add_notice( 'SUCCESS: ' . esc_html( $result->apiResponse->marketingDescription ), 'success' );
+
+			return;
 		}
 
-		if ( isset( $result->message ) ) {
+		if ( isset( $result->apiResponse->marketingDescription ) ) {
 
-			wc_add_notice( 'ERROR: ' . esc_html( $result->message ), 'error' );
+			wc_add_notice( 'ERROR: ' . esc_html( $result->apiResponse->marketingDescription ), 'error' );
 
 			// Failed with error.
 			return;

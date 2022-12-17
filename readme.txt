@@ -21,7 +21,8 @@ Accept the Himalayan Bank payment from your store.
 > Checkout the Announcement on v2.
 
 ### Requirements
-* PHP version 8.1 or higher. The plugin simply doesn't work on older plugin version.
+* PHP version 8.1 or higher. The plugin simply doesn't work on older PHP version.
+* PHP [Sodium Extension](https://www.php.net/manual/en/book.sodium.php).
 * Merchant ID (Office ID) & API Key. Contact bank for more information.
 
 ### Intro

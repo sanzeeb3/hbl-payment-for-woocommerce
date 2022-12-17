@@ -55,7 +55,7 @@ class Request {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return array The result of the request.
+	 * @return object The result of the request.
 	 */
 	public function result( $order ) {
 
@@ -92,8 +92,6 @@ class Request {
 
 			$body = json_decode( $body );
 			
-			error_log( print_r( $body, true ) );
-
 			\WC_Gateway_HBL_Payment::log( 'Response details for ' . $order->get_order_number() . ': ' . wc_print_r( $body, true ) );
 
 			return $body;
@@ -116,11 +114,11 @@ class Request {
 		return [
             "apiRequest" => [
                 "requestMessageID" => $this->Guid(),
-                "requestDateTime" => time(),
+                "requestDateTime" => date('Y-m-d\TH:i:s.v\Z'),
                 "language" => "en-US",
             ],
             "officeId" => $this->gateway->get_option( 'merchant_id' ),
-            "orderNo" => $order->get_order_number(),
+            "orderNo" => 4454,
             "productDescription" => "product desc.",
             "paymentType" => "CC",
             "paymentCategory" => "ECOM",
@@ -128,7 +126,7 @@ class Request {
                 "cardNumber" => "4404670000020994",
                 "cardExpiryMMYY" => "0426",
                 "cvvCode" => "829",
-                "payerName" => "Demo Sample"
+                "payerName" => "SUJAN TEST"
             ],
             "storeCardDetails" => [
                 "storeCardFlag" => "N",
@@ -143,15 +141,15 @@ class Request {
             "request3dsFlag" => "N",
             "transactionAmount" => [
                 "amountText" => "000000100000",
-                "currencyCode" => "USD",
+                "currencyCode" => "THB",
                 "decimalPlaces" => 2,
                 "amount" => 1000
             ],
             "notificationURLs" => [
-                "confirmationURL" => site_url(),
-                "failedURL" => site_url(),
-                "cancellationURL" => site_url(),
-                "backendURL" => site_url()
+                "confirmationURL" => $this->notify_url,
+                "failedURL" => $this->notify_url,
+                "cancellationURL" => $this->notify_url,
+                "backendURL" => $this->notify_url
             ],
             "deviceDetails" => [
                 "browserIp" => "1.0.0.1",
@@ -166,12 +164,18 @@ class Request {
                     "purchaseItemDescription" => "Bundled insurance",
                     "purchaseItemPrice" => [
                         "amountText" => "000000100000",
-                        "currencyCode" => "USD",
+                        "currencyCode" => "THB",
                         "decimalPlaces" => 2,
                         "amount" => 1000
                     ],
                     "subMerchantID" => "string",
                     "passengerSeqNo" => 1
+                ]
+			],
+			"customFieldList" => [
+                [
+                    "fieldName" => "Test Field",
+                    "fieldValue" => "This is test"
                 ]
             ]
         ];

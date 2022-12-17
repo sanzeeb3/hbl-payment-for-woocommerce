@@ -24,7 +24,7 @@ return array(
 		'type'        => 'text',
 		'desc_tip'    => true,
 		'description' => __( 'This controls the description which the user sees during checkout.', 'hbl-payment-for-woocommerce' ),
-		'default'     => __( 'Pay via Himalayan Bank. You will be redirected to Himalayan Bank website to securely pay with Himalayan Bank cards.', 'hbl-payment-for-woocommerce' ),
+		'default'     => __( 'Pay via Himalayan Bank Credit Card in real-time.', 'hbl-payment-for-woocommerce' ),
 	),
 	'merchant_id'       => array(
 		'title'       => __( 'Merchant ID (Office ID)', 'hbl-payment-for-woocommerce' ),
