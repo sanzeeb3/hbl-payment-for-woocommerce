@@ -61,10 +61,8 @@ class Request {
 
 		$test_mode = $this->gateway->get_option( 'test_mode' );
 
-		$this->endpoint  = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi' : 'https://core.paco.2c2p.com/api/1.0/Payment/nonUi';
+		$this->endpoint   = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi' : 'https://core.paco.2c2p.com/api/1.0/Payment/nonUi';
 		$hbl_payment_args = $this->get_hbl_payment_args( $order );
-
-		error_log( print_r( $hbl_payment_args, true ) );
 
 		\WC_Gateway_HBL_Payment::log( 'Himalayan Bank Payment Request Args for order ' . $order->get_order_number() . ': ' . wc_print_r( $hbl_payment_args, true ) );
 
@@ -74,13 +72,13 @@ class Request {
 			'body'        => $body,
 			'headers'     => array(
 				'Content-Type' => 'application/json',
-				'apiKey' => $this->gateway->get_option( 'merchant_password' )
+				'apiKey'       => $this->gateway->get_option( 'merchant_password' ),
 			),
 			'timeout'     => 60,
 			'redirection' => 5,
 			'blocking'    => true,
 			'httpversion' => '1.0',
-			'sslverify'   => false,
+			'sslverify'   => true,
 			'data_format' => 'body',
 		);
 
@@ -93,7 +91,7 @@ class Request {
 			$body = wp_remote_retrieve_body( $response );
 
 			$body = json_decode( $body );
-			
+
 			\WC_Gateway_HBL_Payment::log( 'Response details for ' . $order->get_order_number() . ': ' . wc_print_r( $body, true ) );
 
 			return $body;
@@ -113,85 +111,85 @@ class Request {
 
 		\WC_Gateway_HBL_Payment::log( 'Generating payment form for order ' . $order->get_order_number() . '. Notify URL: ' . $this->notify_url );
 
-		return [
-            "apiRequest" => [
-                "requestMessageID" => $this->Guid(),
-                "requestDateTime" => date('Y-m-d\TH:i:s.v\Z'),
-                "language" => "en-US",
-            ],
-            "officeId" => $this->gateway->get_option( 'merchant_id' ),
-            "orderNo" => $order->get_order_number(),
-            "productDescription" => "product desc.",
-            "paymentType" => "CC",
-            "paymentCategory" => "ECOM",
-            "creditCardDetails" => [
-                // "cardNumber" => "4404670000020994",
-                "cardNumber" => isset( $_POST['hbl-payment-card-number'] ) ? wc_clean( $_POST['hbl-payment-card-number'] ) : '',
-                // "cardExpiryMMYY" => "0426",
-				"cardExpiryMMYY" => isset( $_POST['hbl-payment-card-expiry'] ) ? absint( str_replace( ' ', '', str_replace( '/', '', $_POST['hbl-payment-card-expiry'] ) ) ) : '',
-                "cvvCode" =>  isset( $_POST['hbl-payment-card-expiry'] ) ? absint( $_POST['hbl-payment-card-cvc'] ) : '',
+		return array(
+			'apiRequest'                => array(
+				'requestMessageID' => $this->Guid(),
+				'requestDateTime'  => date( 'Y-m-d\TH:i:s.v\Z' ),
+				'language'         => 'en-US',
+			),
+			'officeId'                  => $this->gateway->get_option( 'merchant_id' ),
+			'orderNo'                   => $order->get_order_number(),
+			'productDescription'        => 'product desc.',
+			'paymentType'               => 'CC',
+			'paymentCategory'           => 'ECOM',
+			'creditCardDetails'         => array(
+				// "cardNumber" => "4404670000020994",
+				'cardNumber'     => isset( $_POST['hbl-payment-card-number'] ) ? wc_clean( $_POST['hbl-payment-card-number'] ) : '',
+				// "cardExpiryMMYY" => "0426",
+				'cardExpiryMMYY' => isset( $_POST['hbl-payment-card-expiry'] ) ? absint( str_replace( ' ', '', str_replace( '/', '', $_POST['hbl-payment-card-expiry'] ) ) ) : '',
+				'cvvCode'        => isset( $_POST['hbl-payment-card-expiry'] ) ? absint( $_POST['hbl-payment-card-cvc'] ) : '',
 				// "cvvCode" => "829",
-                "payerName" => "{Your Name}"
-            ],
-            "storeCardDetails" => [
-                "storeCardFlag" => "N",
-                "storedCardUniqueID" => "{{guid}}"
-            ],
-            "installmentPaymentDetails" => [
-                "ippFlag" => "N",
-                "installmentPeriod" => 0,
-                "interestType" => null
-            ],
-            "mcpFlag" => "N",
-            "request3dsFlag" => "N",
-            "transactionAmount" => [
-				"amountText" => "000000". $order->get_total() . "00",
-                "currencyCode" => $order->get_currency(),
-                "decimalPlaces" => 2,
-                "amount" => wc_format_decimal( $order->get_total(), 2 )
-            ],
-            "notificationURLs" => [
-                "confirmationURL" => $this->notify_url,
-                "failedURL" => $this->notify_url,
-                "cancellationURL" => $this->notify_url,
-                "backendURL" => $this->notify_url
-            ],
-            "purchaseItems" => [
-                [
-                    "purchaseItemType" => "ticket",
-                    "referenceNo" => $order->get_order_number(),
-                    "purchaseItemDescription" => "Product Description",
-                    "purchaseItemPrice" => [
-						"amountText" => "000000". $order->get_total() . "00",
-                        "currencyCode" => $order->get_currency(),
-                        "decimalPlaces" => 2,
-                        "amount" => wc_format_decimal($order->get_total(), 2)
-                    ],
-                    "subMerchantID" => "string",
-                    "passengerSeqNo" => 1
-                ]
-			],
-        ];
+				'payerName'      => '{Your Name}',
+			),
+			'storeCardDetails'          => array(
+				'storeCardFlag'      => 'N',
+				'storedCardUniqueID' => '{{guid}}',
+			),
+			'installmentPaymentDetails' => array(
+				'ippFlag'           => 'N',
+				'installmentPeriod' => 0,
+				'interestType'      => null,
+			),
+			'mcpFlag'                   => 'N',
+			'request3dsFlag'            => 'N',
+			'transactionAmount'         => array(
+				'amountText'    => '000000' . $order->get_total() . '00',
+				'currencyCode'  => $order->get_currency(),
+				'decimalPlaces' => 2,
+				'amount'        => wc_format_decimal( $order->get_total(), 2 ),
+			),
+			'notificationURLs'          => array(
+				'confirmationURL' => $this->notify_url,
+				'failedURL'       => $this->notify_url,
+				'cancellationURL' => $this->notify_url,
+				'backendURL'      => $this->notify_url,
+			),
+			'purchaseItems'             => array(
+				array(
+					'purchaseItemType'        => 'ticket',
+					'referenceNo'             => $order->get_order_number(),
+					'purchaseItemDescription' => 'Product Description',
+					'purchaseItemPrice'       => array(
+						'amountText'    => '000000' . $order->get_total() . '00',
+						'currencyCode'  => $order->get_currency(),
+						'decimalPlaces' => 2,
+						'amount'        => wc_format_decimal( $order->get_total(), 2 ),
+					),
+					'subMerchantID'           => 'string',
+					'passengerSeqNo'          => 1,
+				),
+			),
+		);
 	}
 
 	/**
-     * Creates a GUID
-     *
-     * @return string
-     */
-    private function Guid(): string
-    {
-        if (function_exists('com_create_guid')) {
-            return com_create_guid();
-        } else {
-            $charId = strtoupper(md5(uniqid(rand(), true)));
-            $hyphen = chr(45);// "-"
-            $guid = substr($charId, 0, 8) . $hyphen
-                . substr($charId, 8, 4) . $hyphen
-                . substr($charId, 12, 4) . $hyphen
-                . substr($charId, 16, 4) . $hyphen
-                . substr($charId, 20, 12);
-            return strtolower($guid);
-        }
-    }
+	 * Creates a GUID
+	 *
+	 * @return string
+	 */
+	private function Guid(): string {
+		if ( function_exists( 'com_create_guid' ) ) {
+			return com_create_guid();
+		} else {
+			$charId = strtoupper( md5( uniqid( rand(), true ) ) );
+			$hyphen = chr( 45 );
+			// "-"
+			$guid = substr( $charId, 0, 8 ) . $hyphen
+				. substr( $charId, 8, 4 ) . $hyphen
+				. substr( $charId, 12, 4 ) . $hyphen
+				. substr( $charId, 16, 4 ) . $hyphen
+				. substr( $charId, 20, 12 );
+			return strtolower( $guid );
+		}
+	}
 }

@@ -41,7 +41,7 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 		$this->id                 = 'hbl-payment';
 		$this->icon               = apply_filters( 'hbl_payment_for_woocommerce_icon', plugins_url( 'assets/hbl-payment.png', HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_FILE ) );
 		$this->has_fields         = true;
-		$this->supports = [ 'default_credit_card_form' ];
+		$this->supports           = array( 'default_credit_card_form' );
 		$this->order_button_text  = __( 'Proceed to Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
 		$this->method_title       = __( 'Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
 		$this->method_description = __( 'Take payments via Himalayan Bank credit card in real time.', 'hbl-payment-for-woocommerce' );
