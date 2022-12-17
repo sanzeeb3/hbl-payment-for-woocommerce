@@ -17,7 +17,7 @@ Adds Himalayan Bank Payment Gateway for WooCommerce.
 Accept the Himalayan Bank payment from your store.
 
 > <strong>IMPORTANT</strong><br />
-> This is Himalayan Bank Payment version 2. v1 doesn't work anymore. Immediately update to v2 if you're still using v1.
+> This is Himalayan Bank Payment version 2. v1 doesn't work anymore..
 > This is a early (beta) version of v2. Perform various testings before using it in production sites.
 
 ### Requirements

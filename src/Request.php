@@ -144,15 +144,9 @@ class Request {
             ],
             "mcpFlag" => "N",
             "request3dsFlag" => "N",
-			// "transactionAmount" => [
-            //     "amountText" => "000000100000",
-            //     "currencyCode" => "THB",
-            //     "decimalPlaces" => 2,
-            //     "amount" => '1000.00'
-            // ],
             "transactionAmount" => [
-				"amountText" => "000000" . absint( $order->get_total() ) ."00",
-                "currencyCode" => 'THB',
+				"amountText" => "000000". $order->get_total() . "00",
+                "currencyCode" => $order->get_currency(),
                 "decimalPlaces" => 2,
                 "amount" => wc_format_decimal( $order->get_total(), 2 )
             ],
@@ -167,15 +161,9 @@ class Request {
                     "purchaseItemType" => "ticket",
                     "referenceNo" => $order->get_order_number(),
                     "purchaseItemDescription" => "Product Description",
-					// "purchaseItemPrice" => [
-                    //     "amountText" => "000000100000",
-                    //     "currencyCode" => "THB",
-                    //     "decimalPlaces" => 2,
-                    //     "amount" => '1000.00'
-                    // ],
                     "purchaseItemPrice" => [
-                        "amountText" => "000000" . absint( $order->get_total() ) ."00",
-                        "currencyCode" => 'THB',
+						"amountText" => "000000". $order->get_total() . "00",
+                        "currencyCode" => $order->get_currency(),
                         "decimalPlaces" => 2,
                         "amount" => wc_format_decimal($order->get_total(), 2)
                     ],

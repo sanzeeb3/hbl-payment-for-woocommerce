@@ -131,7 +131,9 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 	 * @return bool
 	 */
 	public function is_valid_for_use() {
-		return in_array( get_woocommerce_currency(), apply_filters( 'hbl_payment_for_woocommerce_supported_currencies', array( 'USD', 'NPR' ) ), true );
+
+		// return in_array( get_woocommerce_currency(), apply_filters( 'hbl_payment_for_woocommerce_supported_currencies', array( 'USD', 'NPR', 'THB' ) ), true );
+		return true;
 	}
 
 	/**
