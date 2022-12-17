@@ -47,6 +47,10 @@ Namaste!
 
 That's fine. "Processing" doesn't mean it's processing payment -- it means it's being processed/fulfilled by the site owner. [Read More](https://sanjeebaryal.com.np/why-is-my-woocommerce-order-status-always-processing/)
 
+= The plugin is awesome. Can I contribute?
+
+Yes, join the [GitHub Repository](https://github.com/sanzeeb3/hbl-payment-for-woocommerce). Contributions of any kind are welcome, not just the codes.
+
 = I have other questions =
 
 Feel free to ask at [https://sanjeebaryal.com.np/](https://sanjeebaryal.com.np/)
