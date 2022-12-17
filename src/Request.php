@@ -123,12 +123,9 @@ class Request {
 			'paymentType'               => 'CC',
 			'paymentCategory'           => 'ECOM',
 			'creditCardDetails'         => array(
-				// "cardNumber" => "4404670000020994",
 				'cardNumber'     => isset( $_POST['hbl-payment-card-number'] ) ? wc_clean( $_POST['hbl-payment-card-number'] ) : '',
-				// "cardExpiryMMYY" => "0426",
-				'cardExpiryMMYY' => isset( $_POST['hbl-payment-card-expiry'] ) ? absint( str_replace( ' ', '', str_replace( '/', '', $_POST['hbl-payment-card-expiry'] ) ) ) : '',
-				'cvvCode'        => isset( $_POST['hbl-payment-card-expiry'] ) ? absint( $_POST['hbl-payment-card-cvc'] ) : '',
-				// "cvvCode" => "829",
+				'cardExpiryMMYY' => isset( $_POST['hbl-payment-card-expiry'] ) ? wc_clean( str_replace( ' ', '', str_replace( '/', '', $_POST['hbl-payment-card-expiry'] ) ) ) : '',
+				'cvvCode'        => isset( $_POST['hbl-payment-card-expiry'] ) ? wc_clean( $_POST['hbl-payment-card-cvc'] ) : '',
 				'payerName'      => '{Your Name}',
 			),
 			'storeCardDetails'          => array(
@@ -142,12 +139,12 @@ class Request {
 			),
 			'mcpFlag'                   => 'N',
 			'request3dsFlag'            => 'N',
-			'transactionAmount'         => array(
-				'amountText'    => '000000' . $order->get_total() . '00',
-				'currencyCode'  => $order->get_currency(),
-				'decimalPlaces' => 2,
-				'amount'        => wc_format_decimal( $order->get_total(), 2 ),
-			),
+            "transactionAmount" => [
+				"amountText" => '000000' . wc_format_decimal( $order->get_total(), 2 ),
+                "currencyCode" => $order->get_currency(),
+                "decimalPlaces" => 2,
+                "amount" => $order->get_total(),
+            ],
 			'notificationURLs'          => array(
 				'confirmationURL' => $this->notify_url,
 				'failedURL'       => $this->notify_url,
@@ -159,12 +156,12 @@ class Request {
 					'purchaseItemType'        => 'ticket',
 					'referenceNo'             => $order->get_order_number(),
 					'purchaseItemDescription' => 'Product Description',
-					'purchaseItemPrice'       => array(
-						'amountText'    => '000000' . $order->get_total() . '00',
-						'currencyCode'  => $order->get_currency(),
-						'decimalPlaces' => 2,
-						'amount'        => wc_format_decimal( $order->get_total(), 2 ),
-					),
+					'purchaseItemPrice'       => [
+						"amountText" => '000000' . wc_format_decimal( $order->get_total(), 2 ),
+						"currencyCode" => $order->get_currency(),
+						"decimalPlaces" => 2,
+						"amount" => $order->get_total(),
+					],
 					'subMerchantID'           => 'string',
 					'passengerSeqNo'          => 1,
 				),

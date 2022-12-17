@@ -39,7 +39,6 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 	 */
 	public function __construct() {
 		$this->id                 = 'hbl-payment';
-		$this->icon               = apply_filters( 'hbl_payment_for_woocommerce_icon', plugins_url( 'assets/hbl-payment.png', HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_FILE ) );
 		$this->has_fields         = true;
 		$this->supports           = array( 'default_credit_card_form' );
 		$this->order_button_text  = __( 'Proceed to Himalayan Bank Payment', 'hbl-payment-for-woocommerce' );
@@ -63,9 +62,6 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 
 		if ( ! $this->is_valid_for_use() ) {
 			$this->enabled = 'no';
-		} elseif ( $this->merchant_id ) {
-			include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/Response.php';
-			new \HBLPaymentForWooCommerce\Response( $this );
 		}
 	}
 
@@ -175,7 +171,6 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 	 * @return mixed
 	 */
 	public function process_payment( $order_id ) {
-		include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/library/index.php';
 
 		include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/Request.php';
 
@@ -188,6 +183,11 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 		if ( isset( $result->apiResponse->responseCode ) && 'PC-B050000' === $result->apiResponse->responseCode ) {
 
 			wc_add_notice( 'SUCCESS: ' . esc_html( $result->apiResponse->marketingDescription ), 'success' );
+
+			if ( $order ) {
+				// Assuming complete.
+				$order->update_status( 'processing' );
+			}
 
 			return;
 		}

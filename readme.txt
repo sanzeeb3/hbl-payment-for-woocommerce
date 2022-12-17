@@ -3,8 +3,8 @@ Contributors: sanzeeb3, lijnam
 Tags: hbl-payment, woocommerce
 Requires at least: 5.0
 Tested up to: 6.1
-Requires PHP: 8.1
-Stable tag: 2.0.0
+Requires PHP: 8.0
+Stable tag: 2.0.1
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -21,7 +21,7 @@ Accept the Himalayan Bank payment from your store.
 > This is a early (beta) version of v2. Perform various testings before using it in production sites.
 
 ### Requirements
-* PHP version 8.1 or higher. The plugin simply doesn't work on older PHP version.
+* PHP version 8.0 or higher. The plugin simply doesn't work on older PHP version.
 * PHP [Sodium Extension](https://www.php.net/manual/en/book.sodium.php).
 * Merchant ID (Office ID) & API Key. Contact bank for these information.
 
@@ -30,7 +30,7 @@ Accept the Himalayan Bank payment from your store.
 
 Developer of this plugin is not associated with Himalayan Bank in anyway. 
 
-You can get this plugin FREE and setup yourself by following the [step by step documentation](https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/). 
+You can get this plugin FREE and setup yourself by following the [step by step documentation](https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/).
 
 I beleive that you needn't hire a developer to accept Himalayan Bank payment on your WooCommerce store.
 
@@ -43,9 +43,22 @@ Namaste!
 
 == Frequently Asked Questions ==
 
-No Questions Yet. Feel free to ask at [https://sanjeebaryal.com.np/](https://sanjeebaryal.com.np/)
+= Why the payment status remains at "Processing"? =
+
+That's fine. "Processing" doesn't mean it's processing payment -- it means it's being processed/fulfilled by the site owner. [Read More](https://sanjeebaryal.com.np/why-is-my-woocommerce-order-status-always-processing/)
+
+= I have other questions =
+
+Feel free to ask at [https://sanjeebaryal.com.np/](https://sanjeebaryal.com.np/)
+
 
 == Changelog ==
+
+= 2.0.1 = 12/17/2022 =
+* Fix - update payment status on success.
+
+= 2.0.0 - 12/17/2022 =
+* Update to new API
 
 = 1.0.2 - 06/28/2021 =
 * Fix - redirection after cancelling order
