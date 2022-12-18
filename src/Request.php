@@ -64,7 +64,11 @@ class Request {
 		$this->endpoint   = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi' : 'https://core.paco.2c2p.com/api/1.0/Payment/nonUi';
 		$hbl_payment_args = $this->get_hbl_payment_args( $order );
 
-		\WC_Gateway_HBL_Payment::log( 'Himalayan Bank Payment Request Args for order ' . $order->get_order_number() . ': ' . wc_print_r( $hbl_payment_args, true ) );
+		$log_args = $hbl_payment_args;
+
+		unset( $log_args['creditCardDetails'] );
+
+		\WC_Gateway_HBL_Payment::log( 'Himalayan Bank Payment Request Args for order ' . $order->get_order_number() . ': ' . wc_print_r( $log_args, true ) );
 
 		$body = wp_json_encode( $hbl_payment_args );
 
@@ -125,7 +129,7 @@ class Request {
 			'creditCardDetails'         => array(
 				'cardNumber'     => isset( $_POST['hbl-payment-card-number'] ) ? wc_clean( $_POST['hbl-payment-card-number'] ) : '',
 				'cardExpiryMMYY' => isset( $_POST['hbl-payment-card-expiry'] ) ? wc_clean( str_replace( ' ', '', str_replace( '/', '', $_POST['hbl-payment-card-expiry'] ) ) ) : '',
-				'cvvCode'        => isset( $_POST['hbl-payment-card-expiry'] ) ? wc_clean( $_POST['hbl-payment-card-cvc'] ) : '',
+				'cvvCode'        => isset( $_POST['hbl-payment-card-cvc'] ) ? wc_clean( $_POST['hbl-payment-card-cvc'] ) : '',
 				'payerName'      => '{Your Name}',
 			),
 			'storeCardDetails'          => array(
@@ -139,12 +143,12 @@ class Request {
 			),
 			'mcpFlag'                   => 'N',
 			'request3dsFlag'            => 'N',
-            "transactionAmount" => [
-				"amountText" => '000000' . wc_format_decimal( $order->get_total(), 2 ),
-                "currencyCode" => $order->get_currency(),
-                "decimalPlaces" => 2,
-                "amount" => $order->get_total(),
-            ],
+			'transactionAmount'         => array(
+				'amountText'    => '000000' . str_replace( '.', '', wc_format_decimal( $order->get_total(), 2 ) ),
+				'currencyCode'  => $order->get_currency(),
+				'decimalPlaces' => 2,
+				'amount'        => $order->get_total(),
+			),
 			'notificationURLs'          => array(
 				'confirmationURL' => $this->notify_url,
 				'failedURL'       => $this->notify_url,
@@ -156,12 +160,12 @@ class Request {
 					'purchaseItemType'        => 'ticket',
 					'referenceNo'             => $order->get_order_number(),
 					'purchaseItemDescription' => 'Product Description',
-					'purchaseItemPrice'       => [
-						"amountText" => '000000' . wc_format_decimal( $order->get_total(), 2 ),
-						"currencyCode" => $order->get_currency(),
-						"decimalPlaces" => 2,
-						"amount" => $order->get_total(),
-					],
+					'purchaseItemPrice'       => array(
+						'amountText'    => '000000' . str_replace( '.', '', wc_format_decimal( $order->get_total(), 2 ) ),
+						'currencyCode'  => $order->get_currency(),
+						'decimalPlaces' => 2,
+						'amount'        => $order->get_total(),
+					),
 					'subMerchantID'           => 'string',
 					'passengerSeqNo'          => 1,
 				),
@@ -172,9 +176,11 @@ class Request {
 	/**
 	 * Creates a GUID
 	 *
+	 * @since 2.0.0
+	 *
 	 * @return string
 	 */
-	private function Guid(): string {
+	private function Guid() {
 		if ( function_exists( 'com_create_guid' ) ) {
 			return com_create_guid();
 		} else {
