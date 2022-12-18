@@ -76,7 +76,8 @@ class Request {
 			'body'        => $body,
 			'headers'     => array(
 				'Content-Type' => 'application/json',
-				'apiKey'       => $this->gateway->get_option( 'merchant_password' ),
+				'Accept' => 'application/json',
+				'apiKey' => $this->gateway->get_option( 'merchant_password' ),
 			),
 			'timeout'     => 60,
 			'redirection' => 5,
@@ -96,7 +97,7 @@ class Request {
 
 			$body = json_decode( $body );
 
-			\WC_Gateway_HBL_Payment::log( 'Response details for ' . $order->get_order_number() . ': ' . wc_print_r( $body, true ) );
+			\WC_Gateway_HBL_Payment::log( 'Response details for ' . $order->get_order_number() . ': ' . wc_print_r( $response, true ) );
 
 			return $body;
 		}
