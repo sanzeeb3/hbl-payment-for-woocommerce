@@ -194,11 +194,14 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 
 		if ( isset( $result->apiResponse->marketingDescription ) ) {
 
-			wc_add_notice( 'ERROR: ' . esc_html( $result->apiResponse->marketingDescription ), 'error' );
+			wc_add_notice( 'ERROR: ' . esc_html( $result->apiResponse->marketingDescription ) . '. Please follow the <a href="https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/#testing" target="_blank">testing & debugging instructions.</a>', 'error' );
 
 			// Failed with error.
 			return;
 		}
+
+		// Something went wrong.
+		wc_add_notice( 'ERROR: Something went wrong. Please follow the <a href="https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/#testing" target="_blank">testing & debugging instructions.</a>'  , 'error' );
 
 		// Failed anyway.
 		return; //phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired.

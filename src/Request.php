@@ -144,7 +144,7 @@ class Request {
 			'mcpFlag'                   => 'N',
 			'request3dsFlag'            => 'N',
 			'transactionAmount'         => array(
-				'amountText'    => '000000' . str_replace( '.', '', wc_format_decimal( $order->get_total(), 2 ) ),
+				'amountText'    => sprintf( '%012d', $order->get_total() * 100 ),
 				'currencyCode'  => $order->get_currency(),
 				'decimalPlaces' => 2,
 				'amount'        => $order->get_total(),
@@ -161,7 +161,7 @@ class Request {
 					'referenceNo'             => $order->get_order_number(),
 					'purchaseItemDescription' => 'Product Description',
 					'purchaseItemPrice'       => array(
-						'amountText'    => '000000' . str_replace( '.', '', wc_format_decimal( $order->get_total(), 2 ) ),
+						'amountText'    => sprintf( '%012d', $order->get_total() * 100 ),
 						'currencyCode'  => $order->get_currency(),
 						'decimalPlaces' => 2,
 						'amount'        => $order->get_total(),
