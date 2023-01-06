@@ -1,7 +1,5 @@
 <?php
 
-namespace HBLPaymentForWooCommerce\Inc;
-
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
@@ -26,6 +24,7 @@ use Jose\Component\Encryption\JWELoader;
 use Jose\Component\Encryption\JWETokenSupport;
 use Jose\Component\Encryption\Serializer\CompactSerializer as JWECompactSerializer;
 use Jose\Component\Encryption\Serializer\JWESerializerManager;
+use Jose\Component\KeyManagement\JWKFactory as JWKFactory;
 use Jose\Component\Signature\Algorithm\PS256;
 use Jose\Component\Signature\JWSBuilder;
 use Jose\Component\Signature\JWSLoader;
@@ -159,6 +158,34 @@ abstract class ActionRequest
                 ]
             )
         );
+    }
+
+    /**
+     * Creates a JWK Private Key from PKCS#8 Encoded Private Key
+     *
+     * @param string $key
+     * @param string|null $password
+     * @param array $additional_values
+     * @return JWK
+     */
+    protected function GetPrivateKey(string $key, ?string $password = null, array $additional_values = []): JWK
+    {
+        $privateKey = "-----BEGIN RSA PRIVATE KEY-----\n" . $key . "\n-----END RSA PRIVATE KEY-----";
+        return JWKFactory::createFromKey($privateKey, $password, $additional_values);
+    }
+
+    /**
+     * Creates a JWK Public Key from PKCS#8 Encoded Public Key
+     *
+     * @param string $key
+     * @param string|null $password
+     * @param array $additional_values
+     * @return JWK
+     */
+    protected function GetPublicKey(string $key, ?string $password = null, array $additional_values = []): JWK
+    {
+        $publicKey = "-----BEGIN PUBLIC KEY-----\n" . $key . "\n-----END PUBLIC KEY-----";
+        return JWKFactory::createFromKey($publicKey, $password, $additional_values);
     }
 
     /**

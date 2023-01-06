@@ -1,7 +1,5 @@
 <?php
 
-namespace HBLPaymentForWooCommerce\Inc;
-
 class SecurityData
 {
     /**

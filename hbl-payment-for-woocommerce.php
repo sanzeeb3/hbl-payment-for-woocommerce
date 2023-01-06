@@ -40,9 +40,10 @@ add_action(
 			return;
 		}
 
-		require_once __DIR__ . '/src/Plugin.php';
+		require_once __DIR__ . '/vendor/autoload.php';
 		require_once __DIR__ . '/src/inc/ActionRequest.php';
 		require_once __DIR__ . '/src/inc/SecurityData.php';
+		require_once __DIR__ . '/src/Plugin.php';
 	}
 );
 
