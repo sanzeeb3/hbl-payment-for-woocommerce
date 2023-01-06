@@ -210,7 +210,7 @@ class Request extends \ActionRequest {
 	 * 
 	 * @since 2.0.5
 	 */
-	private function handle_live_mode( $order ) {
+	public function handle_live_mode( $order ) {
 
 		$request = $this->get_hbl_payment_args( $order );
         $now = Carbon::now();
