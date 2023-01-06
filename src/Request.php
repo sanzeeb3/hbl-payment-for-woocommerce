@@ -2,12 +2,15 @@
 
 namespace HBLPaymentForWooCommerce;
 
+use Carbon\Carbon as Carbon;
+use GuzzleHttp\Exception\GuzzleException;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Request to Himalayan Bank.
  */
-class Request {
+class Request extends Inc\ActionRequest {
 
 	/**
 	 * Pointer to gateway making the request.
@@ -61,7 +64,13 @@ class Request {
 
 		$test_mode = $this->gateway->get_option( 'test_mode' );
 
-		$this->endpoint   = 'yes' === $test_mode ? 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi' : 'https://core.paco.2c2p.com/api/1.0/Payment/nonUi';
+		if ( 'yes' !== $test_mode ) {
+			$body = $this->handle_live_mode( $order );
+
+			return $body;
+		}
+
+		$this->endpoint   = 'https://core.demo-paco.2c2p.com/api/1.0/Payment/nonUi';
 		$hbl_payment_args = $this->get_hbl_payment_args( $order );
 
 		$log_args = $hbl_payment_args;
@@ -195,5 +204,51 @@ class Request {
 				. substr( $charId, 20, 12 );
 			return strtolower( $guid );
 		}
+	}
+
+	/**
+	 * Handle live mode.
+	 * 
+	 * @since 2.0.5
+	 */
+	private function handle_live_mode( $order ) {
+
+		$request = $this->get_hbl_payment_args( $order );
+		$now = Carbon::now();
+
+		$payload = [
+            "request" => $request,
+            "iss" => $this->gateway->get_option( 'merchant_password' ),
+            "aud" => "PacoAudience",
+            "CompanyApiKey" => $this->gateway->get_option( 'merchant_password' ),
+            "iat" => '',
+            "nbf" => '',
+            "exp" => '',
+        ];
+
+		$stringPayload = json_encode($payload);
+
+		$signingKey =  $this->gateway->get_option( 'private_signing_key' );
+        $encryptingKey = 'MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA6ZLups2K0iYEMxQqgASX8gY6tWhNVCp08YuDgjCsOVrGVgUHD0dh0TWFNJ7Lq2Jp0SOsGgi54+hrjwPOL2CCZxw8pKUlL57UksoD9oWUrK/KkSvEAwPU4cZqzxIXyhBcZb8O96iN4WQJILkRTg+DXLkML6qisO496fPGIs+vCoc87toucy5O9fRfaYSjcqjreyi8JDkvVJM/BeNtOEM2a0b/lcWa67RH+tN97H25k+Qez7QthLru6oBfWBgD6iIwhV+ICqLWHmp6fQ+DHQk/o+OO3yFiY9OAvMiy8MOTinvkBlFwYgYNznG3/w0Xh8U5vtudUXPDNUO6ddf4y99+6LlWDiKgJn/Th93YUg+gFH4LUJHyPrSY2JuC+Q8kksp2xyiZDTHGzi96kturwrqCui6TytCHcU4UB0VRMR+M7VRl3S2YPhcxv5U8Fh2PITqydZE5vv1Va06qhegjOlSZnEUl2xKPm5k/u+UHvUP/oq04fQLTlYqyA3JYDCe4z5Ea2SOgjeVl+qTatWYzmkUXyCONLZ4UaRrgbYCp0nCPHoTFgRQdChu8ezDbnYY9IW7cT/s2fEi5N7X1XrQttiEP4rbn0y0qVYYjN86+elfhtYGHidZTUSUS5RSTHqOkj59p5LIGwFF9iTXzCjfUqq8clnfOk76qSLY1+Kj+SMMe6Z8CAwEAAQ==';
+
+		$body = $this->EncryptPayload($stringPayload, $signingKey, $encryptingKey);
+
+        //third-party http client https://github.com/guzzle/guzzle
+        $response = $this->client->post('api/1.0/Payment/NonUi', [
+            'headers' => [
+                'Accept' => 'application/jose',
+                'CompanyApiKey' => $this->gateway->get_option( 'merchant_password' ),
+                'Content-Type' => 'application/jose; charset=utf-8'
+            ],
+            'body' => $body
+        ]);
+
+        $token = $response->getBody()->getContents();
+        $decryptingKey = $this->gateway->get_option( 'private_encryption_key' );
+        $signatureVerificationKey = 'MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAr0XW6QacR8GilY4nZrJZW40wnFeYu7h9aXUSqxCP6djurCWZmLqnrsYWP7/HR8WOulYPHTVpfqJesTOdVqPgY6p10H811oRbJG9jvsG8j8kn/Bk8b2wZ9qelNqdNJMDbR5WUyaytaDWW6QdI4+clqjFfwCOw76noDSe+R4pDSzgMiyCk5R4m2ECT1fv/4Axz2bvLN+DRTg5DPPIMLWpA87lgjxeaDlGyJqZCbkJozW7JX0AJVc0X7YR9kzbiTi3LVOInSKY+VHT8yCARIdvXtKc6+IWSbVQqgpNIBB8GN0OvU8xedjPNCMGZnnMtgd7XLTf/okyadbdNLAqQLTbDs/5HnIVx8FyfgiOS/zsim5ivi3ljVAW3T3ePGjkY0q1DMzr5iJ4m/WTL2d1TArlfHyQhkSpFpQPOO+pJyVQqttHJo99vMirQogdSx4lIu//aod0yJyJLpjCeiqb2Fz3Qk0AZ4S78QKeeGsxTRchTP6Wsb6okaZd+cFi6z8qbP0z/Y3xRZO7vOLB/whkqS+pMVKBQ42YzgQPRzbXXmgCkf1nCqgrD9bnIB5ovdRGfDXW86GKY8XwGVjb4BoMvql+HsbonKHAO+eGfQulpB5YfQGQU3ZXdMdfCLAk8FuqemH4k7S7diLzVvRCuisHsEx6qJ4ewxzNCvW7OGVinTR9NSQUCAwEAAQ==';
+
+		error_log( print_r($this->DecryptToken($token, $decryptingKey, $signatureVerificationKey), true ) );
+
+        return $this->DecryptToken($token, $decryptingKey, $signatureVerificationKey);
 	}
 }

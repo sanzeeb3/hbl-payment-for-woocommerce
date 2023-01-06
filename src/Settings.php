@@ -71,30 +71,30 @@ return array(
 		'title'       => __( 'Signing/Encryption Keys', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'title',
 		'description' => sprintf(
-			__( 'Himalayan Bank requires the <u> public signing and public encryption key </u> to setup the Merchant. You should generating the keys by yourself. Use <a href="%1$s">this tool</a> to generate the keys. Follow the <a href="%2$s">setup instructions</a> for more details. <br/> <p style="color:red">Only share public keys to Himalayan Bank. DO NOT SHARE THE PRIVATE KEYS WITH ANYONE.</p>', 'hbl-payment-for-woocommerce' ),
+			__( 'Himalayan Bank requires the <u> public signing and public encryption key </u> to setup the Merchant. You should generate the keys by yourself. Use <a href="%1$s">this tool</a> to generate the keys. Follow the <a href="%2$s">setup instructions</a> for more details. <br/> <p style="color:red">Only share public keys to Himalayan Bank. DO NOT SHARE THE PRIVATE KEYS WITH ANYONE.</p>', 'hbl-payment-for-woocommerce' ),
 			'https://www.devglan.com/online-tools/rsa-encryption-decryption',
 			'https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site#setup'
 		),
 	),
-	'public_signing'     => array(
+	'public_signing_key'     => array(
 		'title'       => __( 'Public Signing Key', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'textarea',
 		'desc_tip'    => true,
 		'description' => __( 'Share this key with the Himalayan Bank.', 'hbl-payment-for-woocommerce' ),
 	),
-	'private_signing'    => array(
+	'private_signing_key'    => array(
 		'title'       => __( 'Private Signing Key <p>(DO NOT SHARE)</p>', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'textarea',
 		'desc_tip'    => true,
 		'description' => __( 'DO NOT SHARE THIS KEY WITH ANYONE', 'hbl-payment-for-woocommerce' ),
 	),
-	'public_encryption'  => array(
+	'public_encryption_key'  => array(
 		'title'       => __( 'Public Encryption Key', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'textarea',
 		'desc_tip'    => true,
 		'description' => __( 'Share this key with the Himalayan Bank.', 'hbl-payment-for-woocommerce' ),
 	),
-	'private_encryption' => array(
+	'private_encryption_key' => array(
 		'title'       => __( 'Private Encryption Key <p>(DO NOT SHARE)</p>', 'hbl-payment-for-woocommerce' ),
 		'type'        => 'textarea',
 		'desc_tip'    => true,

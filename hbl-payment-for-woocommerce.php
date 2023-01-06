@@ -41,6 +41,8 @@ add_action(
 		}
 
 		require_once __DIR__ . '/src/Plugin.php';
+		require_once __DIR__ . '/src/inc/ActionRequest.php';
+		require_once __DIR__ . '/src/inc/SecurityData.php';
 	}
 );
 
