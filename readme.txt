@@ -1,4 +1,4 @@
-=== Add Himalayan Bank Payment In WooCommerce (HBL Payment v2) ===
+=== Add Himalayan Bank Payment In WooCommerce (HBL Payment) ===
 Contributors: sanzeeb3, lijnam
 Tags: hbl-payment, woocommerce
 Requires at least: 5.0
@@ -12,7 +12,7 @@ Adds Himalayan Bank Payment Gateway for WooCommerce.
 
 == Description ==
 
-### HIMALAYAN BANK PAYMENT GATEWAY PLUGIN V2
+### HIMALAYAN BANK PAYMENT GATEWAY PLUGIN
 
 Accept the Himalayan Bank payment from your store.
 

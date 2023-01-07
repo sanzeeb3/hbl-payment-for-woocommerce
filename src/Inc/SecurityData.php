@@ -7,7 +7,7 @@ class SecurityData
      *
      * @var string
      */
-    public static string $EncryptionKeyId = "7664a2ed0dee4879bdfca0e8ce1ac313";
+    public static string $EncryptionKeyId = "19f84b5655f04e25a99b09f1ee2fac78";
 
     /**
      * Access Token.

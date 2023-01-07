@@ -1,9 +1,6 @@
 <?php
 
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\Middleware;
 use Jose\Component\Checker\AlgorithmChecker;
 use Jose\Component\Checker\AudienceChecker;
 use Jose\Component\Checker\ClaimCheckerManager;
@@ -37,10 +34,6 @@ use Psr\Http\Message\RequestInterface;
 
 abstract class ActionRequest
 {
-    private const PaymentEndpoint = "https://core.paco.2c2p.com/";
-
-    protected Client $client;
-
     private JWSCompactSerializer $jwsCompactSerializer;
     private JWSBuilder $jwsBuilder;
     private JWSLoader $jwsLoader;
@@ -52,17 +45,6 @@ abstract class ActionRequest
 
     public function __construct()
     {
-        $handler = HandlerStack::create();
-
-        $handler->push(Middleware::mapRequest(function (RequestInterface $request) {
-            return $request->withoutHeader('User-Agent');
-        }));
-
-        $this->client = new Client([
-            'base_uri' => self::PaymentEndpoint,
-            'handler' => $handler
-        ]);
-
         $this->jwsCompactSerializer = new JWSCompactSerializer();
         $this->jwsBuilder = new JWSBuilder(
             signatureAlgorithmManager: new AlgorithmManager(
