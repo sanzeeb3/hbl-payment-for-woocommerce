@@ -3,7 +3,7 @@ Contributors: sanzeeb3, lijnam
 Tags: hbl-payment, woocommerce
 Requires at least: 5.0
 Tested up to: 6.1
-Requires PHP: 7.4
+Requires PHP: 8.0
 Stable tag: 2.0.3
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -16,10 +16,11 @@ Adds Himalayan Bank Payment Gateway for WooCommerce.
 
 Accept the Himalayan Bank payment from your store.
 
-> <strong>IMPORTANT</strong><br />
-> This is Himalayan Bank Payment version 2. The plugin version 1.x doesn't work anymore..
-> It's strongly recommended to update plugin to version 2.x. Perform various testings before using it in production sites.
+> <strong>REQUIREMENTS</strong><br />
+> PHP Version 8 or above.
+> PHP [Sodium Extension](https://www.php.net/manual/en/book.sodium.php).
 
+The plugin simply doesn't work if the above requirements aren't met.
  
 Follow [the testing instructions](https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/#testing).
 

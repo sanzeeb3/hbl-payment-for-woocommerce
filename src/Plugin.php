@@ -32,6 +32,8 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 	 */
 	public static $log = false;
 
+	public $request;
+
 	/**
 	 * Constructor for the gateway.
 	 *
@@ -63,6 +65,10 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 		if ( ! $this->is_valid_for_use() ) {
 			$this->enabled = 'no';
 		}
+
+		include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/Request.php';
+
+		$this->request = new \HBLPaymentForWooCommerce\Request( $this );
 	}
 
 	/**
@@ -172,13 +178,9 @@ class WC_Gateway_HBL_Payment extends WC_Payment_Gateway {
 	 */
 	public function process_payment( $order_id ) {
 
-		include_once HBL_PAYMENT_FOR_WOOCOMMERCE_PLUGIN_PATH . '/src/Request.php';
-
 		$order = wc_get_order( $order_id );
 
-		$request = new \HBLPaymentForWooCommerce\Request( $this );
-
-		$result = $request->result( $order );
+		$result = $this->request->result( $order );
 
 		if ( isset( $result->apiResponse->responseCode ) && 'PC-B050000' === $result->apiResponse->responseCode ) {
 

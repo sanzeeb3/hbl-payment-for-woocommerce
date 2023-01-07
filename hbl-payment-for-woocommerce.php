@@ -3,7 +3,7 @@
  * Plugin Name: Add Himalayan Bank Payment In WooCommerce
  * Description: Accept payment from Himalayan Bank in your online store
  * Version: 2.0.3
- * Requires PHP: 7.4
+ * Requires PHP: 8.0
  * Requires at least: 5.0
  * Author: Sanjeev Aryal
  * Author URI: https://www.sanjeebaryal.com.np
