@@ -1,6 +1,10 @@
 <?php
+/**
+ * ActionRequest. Perform most of functionalities of signing/encryption et.
+ * 
+ * @since 2.0.4
+ */
 
-use Exception;
 use Jose\Component\Checker\AlgorithmChecker;
 use Jose\Component\Checker\AudienceChecker;
 use Jose\Component\Checker\ClaimCheckerManager;

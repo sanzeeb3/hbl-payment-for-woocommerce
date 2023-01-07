@@ -117,7 +117,7 @@ class Request extends \ActionRequest {
 	/**
 	 * Handle live mode.
 	 * 
-	 * @since 2.0.5
+	 * @since 2.0.4
 	 */
 	public function handle_live_mode( $order ) {
 
@@ -156,7 +156,6 @@ class Request extends \ActionRequest {
 			'redirection' => 5,
 			'blocking'    => true,
 			'httpversion' => '1.0',
-			'sslverify'   => false,
 			'data_format' => 'body',
 		];
 

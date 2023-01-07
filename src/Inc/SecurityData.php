@@ -1,4 +1,9 @@
 <?php
+/**
+ * Security Data. Some of the required tokens etc.
+ * 
+ * @since 2.0.4
+ */
 
 class SecurityData
 {
