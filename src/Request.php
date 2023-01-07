@@ -161,7 +161,7 @@ class Request extends \ActionRequest {
 
 		$response = wp_remote_post( 'https://core.paco.2c2p.com/api/1.0/Payment/NonUi', $options );
 
-		\WC_Gateway_HBL_Payment::log( 'Got the response!' );
+		\WC_Gateway_HBL_Payment::log( 'Response details for ' . $order->get_order_number() . ': ' . wc_print_r( $response, true ) );
 
 		$token = wp_remote_retrieve_body( $response );
 
