@@ -3,8 +3,8 @@ Contributors: sanzeeb3, lijnam
 Tags: hbl-payment, woocommerce
 Requires at least: 5.0
 Tested up to: 6.1
-Requires PHP: 8.0
-Stable tag: 2.0.4
+Requires PHP: 8.1.0
+Stable tag: 2.0.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,23 +16,27 @@ Adds Himalayan Bank Payment Gateway for WooCommerce.
 
 Accept the Himalayan Bank payment from your store.
 
-> <strong>REQUIREMENTS</strong><br />
-> PHP Version 8 or above.
-> PHP [Sodium Extension](https://www.php.net/manual/en/book.sodium.php).
+> <strong>IMPORTANT</strong><br />
+> The 1.x version of this plugin doesn't work anymore.
+> You should update to version 2.x. However, perform some tests before setting up in the live environment.
+
+
+### REQUIREMENTS
+
+* WooCommerce Plugin.
+* PHP 8.1.0 or higher.
+* PHP [Sodium Extension](https://www.php.net/manual/en/book.sodium.php)
+
 
 The plugin simply doesn't work if the above requirements aren't met.
  
-Follow [the testing instructions](https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/#testing).
+<strong>Follow [the setup instructions](https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/).</strong>
 
 
 ### Intro
 [Himalayan Bank Limited](https://www.himalayanbank.com/) is one of the largest private banks of Nepal. If you do not know about the Himalayan Bank, you probably do not need this plugin.
 
-Developer of this plugin is not associated with Himalayan Bank in anyway. 
-
-You can get this plugin FREE and setup yourself by following the [step by step documentation](https://sanjeebaryal.com.np/accept-himalayan-bank-payment-from-your-woocommerce-site/).
-
-I beleive that you needn't hire a developer to accept Himalayan Bank payment on your WooCommerce store.
+Developer of this plugin is not associated with Himalayan Bank in anyway.
 
 Namaste!
 
@@ -62,6 +66,12 @@ Feel free to ask at [https://sanjeebaryal.com.np/](https://sanjeebaryal.com.np/)
 2. Checkout
 
 == Changelog ==
+
+= 2.0.5 - 01/07/2023 =
+* PHP 8.1 is required for composer dependencies.
+
+= 2.0.4 - 01/08/2023 =
+* Live Mode.
 
 = 2.0.3 - 12/18/2022 =
 * Fix - Amount mismatch.
