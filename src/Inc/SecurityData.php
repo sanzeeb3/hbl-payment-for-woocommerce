@@ -15,13 +15,6 @@ class SecurityData
     public static string $EncryptionKeyId = "19f84b5655f04e25a99b09f1ee2fac78";
 
     /**
-     * Access Token.
-     *
-     * @var string
-     */
-    public static string $AccessToken = "e6c5e2756e2e41878c852bce8d208632";
-
-    /**
      * Token Type - Used in JWS and JWE header.
      *
      * @var string
@@ -51,4 +44,13 @@ class SecurityData
      * @var string
      */
     public static string $JWEEncrptionAlgorithm = "A128CBC-HS256";
+
+    /**
+     * Get access token.
+     *
+     * @since 2.0.7
+     */
+    public static function accessToken() {
+        return get_option( 'woocommerce_hbl-payment_settings' )['merchant_password'] ? get_option( 'woocommerce_hbl-payment_settings' )['merchant_password'] : '';
+    }
 }

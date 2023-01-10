@@ -4,7 +4,7 @@ Tags: hbl-payment, woocommerce
 Requires at least: 5.0
 Tested up to: 6.1
 Requires PHP: 8.1.0
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -66,6 +66,9 @@ Feel free to ask at [https://sanjeebaryal.com.np/](https://sanjeebaryal.com.np/)
 2. Checkout
 
 == Changelog ==
+
+= 2.0.7 - 01/10/2023 =
+* Fix - Access Token Issue & Proper Response
 
 = 2.0.6 - 01/09/2023 =
 * Fix - Case sensitive directory issue.

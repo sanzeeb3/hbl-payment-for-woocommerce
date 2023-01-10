@@ -86,7 +86,7 @@ abstract class ActionRequest
             checkers: [
                 new NotBeforeChecker(),
                 new ExpirationTimeChecker(),
-                new AudienceChecker(SecurityData::$AccessToken),
+                new AudienceChecker(SecurityData::accessToken() ),
                 new IssuerChecker(["PacoIssuer"]),
             ]
         );
