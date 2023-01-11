@@ -124,6 +124,9 @@ class Request extends \ActionRequest {
 		\WC_Gateway_HBL_Payment::log( 'Handling live mode...' );
 
 		$request = $this->get_hbl_payment_args( $order );
+
+		\WC_Gateway_HBL_Payment::log( 'Request details for ' . $order->get_order_number() . ': ' . wc_print_r( $request, true ) );
+
         $now = Carbon::now();
 
 		$payload = [
